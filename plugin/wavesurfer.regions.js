@@ -132,6 +132,11 @@ WaveSurfer.Region = {
         this.drag = params.drag === undefined ? true : Boolean(params.drag);
         this.loop = Boolean(params.loop);
         this.color = params.color || 'rgba(0, 0, 0, 0.1)';
+        //annotate the region
+        this.annotation = params.annotation;
+        //region borders
+        this.borderLeft = params.borderLeft === undefined ? false : Boolean(params.borderLeft);
+        this.borderRight = params.borderRight === undefined ? false : Boolean(params.borderRight);
         this.data = params.data || {};
         this.attributes = params.attributes || {};
 
@@ -216,7 +221,17 @@ WaveSurfer.Region = {
         regionEl.className = 'wavesurfer-region';
         regionEl.title = this.formatTime(this.start, this.end);
         regionEl.setAttribute('data-id', this.id);
-
+        //create annotation label
+        if (this.annotation !== undefined){
+            var labelEl = document.createElement('p');
+            labelEl.innerText = this.annotation;
+            this.style(labelEl, {
+                textAlign: 'center',
+                fontSize: '80%'
+            });
+            regionEl.appendChild(labelEl);
+        }
+        
         for (var attrname in this.attributes) {
             regionEl.setAttribute('data-region-' + attrname, this.attributes[attrname]);
         }
@@ -226,7 +241,10 @@ WaveSurfer.Region = {
             position: 'absolute',
             zIndex: 2,
             height: '100%',
-            top: '0px'
+            top: '0px',
+            //region borders
+            borderLeft: this.borderLeft? '#18bc9c 1px solid' : 'none',
+            borderRight: this.borderRight? '#18bc9c 1px solid' : 'none'
         });
 
         /* Resize handles */
