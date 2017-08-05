@@ -134,6 +134,8 @@ WaveSurfer.Region = {
         this.color = params.color || 'rgba(0, 0, 0, 0.1)';
         //annotate the region
         this.annotation = params.annotation;
+        //border color
+        this.borderColor = this.borderLeft = params.borderColor === undefined ? "#18bc9c" : params.borderColor;
         //region borders
         this.borderLeft = params.borderLeft === undefined ? false : Boolean(params.borderLeft);
         this.borderRight = params.borderRight === undefined ? false : Boolean(params.borderRight);
@@ -243,8 +245,8 @@ WaveSurfer.Region = {
             height: '100%',
             top: '0px',
             //region borders
-            borderLeft: this.borderLeft? '#18bc9c 1px solid' : 'none',
-            borderRight: this.borderRight? '#18bc9c 1px solid' : 'none'
+            borderLeft: this.borderLeft? this.borderColor + ' 1px solid' : 'none',
+            borderRight: this.borderRight? this.borderColor + ' 1px solid' : 'none'
         });
 
         /* Resize handles */
@@ -278,7 +280,8 @@ WaveSurfer.Region = {
         return (start == end ? [ start ] : [ start, end ]).map(function (time) {
             return [
                 Math.floor((time % 3600) / 60), // minutes
-                ('00' + Math.floor(time % 60)).slice(-2) // seconds
+                ('00' + Math.floor(time % 60)).slice(-2), // seconds
+                ((time.toString().indexOf('.') === - 1? '': time.toString().split('.')[1]) + '000' ).substring(0,3) // milliseconds
             ].join(':');
         }).join('-');
     },
